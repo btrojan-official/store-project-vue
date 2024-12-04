@@ -1,6 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 
+import imported_data from './data.js'
+
 // const express = require('express');
 // const cors = require('cors');
 
@@ -8,16 +10,8 @@ const app = express();
 
 app.use(cors());
 
-const data = {
-    
-}
-
-app.get('/api', (req, res) => {
-    const data = {
-        message: 'Hello, this is your JSON response!',
-        success: true,
-        timestamp: new Date().toISOString()
-    };
+app.get('/promotions', (req, res) => {
+    const data = imported_data;
     res.json(data);
 });
 

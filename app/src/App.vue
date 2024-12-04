@@ -1,11 +1,14 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
 export default{
+    components:{
+        Header, Footer
+    },
     mounted() {
-      this.$store.dispatch("GET_POSTS_ACTION");
+      this.$store.dispatch("FETCH_PROMOTIONS");
     }
 }
 </script>

@@ -15,7 +15,13 @@ const promotions = {
     mutations: {
         SET_PROMOTIONS_LIST(state, newPromotions) {
             state.promotionsList = newPromotions
-        }
+        },
+        SET_PROMOTIONS_ERROR(state, newPromotions) {
+            state.promotionsError = newPromotions
+        },
+        SET_PROMOTIONS_LOADING(state, newPromotions) {
+            state.promotionsLoading = newPromotions
+        },
     },
     
     //getters
@@ -30,7 +36,6 @@ const promotions = {
         FETCH_PROMOTIONS({ state, commit }) {
 
             // najpierw ustawiamy stan ładowania na true (czyli dane się ładują, teraz mógłby się pokazywać loader)
-
             commit("SET_PROMOTIONS_LOADING", true)
 
             // potem wywołujemy funkcję z api, która

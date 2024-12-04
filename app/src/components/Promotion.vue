@@ -21,7 +21,7 @@
         }
        
         return {
-          background: `url(${imageUrl})`,
+          backgroundImage: `url(${imageUrl})`,
         };
       },
     },
@@ -29,4 +29,11 @@
   </script>
   
   <style scoped>
+    div{
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      width: 100%;
+      padding: 100px;
+    }
   </style>

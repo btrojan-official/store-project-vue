@@ -9,4 +9,4 @@ const app = createApp(App)
 
 app.use(router)
 
-app.store(modules).mount('#app')
+app.use(modules).mount('#app')
