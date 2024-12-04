@@ -1,0 +1,21 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #e6e6e6;
+}
+
+#main-app{
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr;
+    height: 100%;
+}
+
+#app{
+    width: 100%;
+    height: 100vh;
+}
