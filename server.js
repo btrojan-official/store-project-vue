@@ -8,6 +8,10 @@ const app = express();
 
 app.use(cors());
 
+const data = {
+    
+}
+
 app.get('/api', (req, res) => {
     const data = {
         message: 'Hello, this is your JSON response!',
