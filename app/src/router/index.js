@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
+import PromotionView from '@/views/PromotionView.vue'
 
 const NotFoundView = () => import("@/views/NotFoundView.vue")
 
@@ -23,6 +24,11 @@ const router = createRouter({
         name: 'NotFoundView',
         component: NotFoundView,
       },
+      {
+        path: '/promotion/:id',
+        name: 'PromotionView',
+        component: PromotionView,
+      }
     ]
   })
 

@@ -16,10 +16,14 @@ const get = (url) => new Promise((resolve, reject) => {
 
 
 const getPromotions = () => get("http://localhost:3000/promotions")
+const getPromotion = () => get(`http://localhost:3000/promotion/${id}`)
+const getProduct = () => get(`http://localhost:3000/product/${id}`)
 
 
 export {
 
     getPromotions,
+    getPromotion,
+    getProduct
     //tu będą pozostałe metody
 }
