@@ -28,6 +28,9 @@ const promotions = {
     getters: {
         GET_PROMOTIONS_LIST(state) {
             return state.promotionsList
+        },
+        GET_PROMOTIONS_LOADING(state) {
+            return state.promotionsLoading
         }
     },
     

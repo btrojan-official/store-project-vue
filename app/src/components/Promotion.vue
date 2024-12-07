@@ -1,6 +1,6 @@
 <template>
     <div :style="contStyle">
-      <h3>{{ this.promotion.header }}</h3>
+      <h3><RouterLink :to="routerLink" exact>{{ this.promotion.header }}</RouterLink></h3>
       <h2>{{ this.promotion.description }}</h2>
     </div>
   </template>
@@ -24,6 +24,9 @@
           backgroundImage: `url(${imageUrl})`,
         };
       },
+      routerLink(){
+        return `/promotion/${this.promotion.id}`
+      }
     },
   };
   </script>

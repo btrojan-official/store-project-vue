@@ -15,12 +15,18 @@ const promotion = {
         },
         SET_PROMOTION_LOADING(state, value){
             state.promotionLoading = value
+        },
+        SET_PROMOTION_ERROR(state, value){
+            state.promotionError = value
         }
     },
 
     getters:{
         GET_PROMOTION_OBJECT(state) {
             return state.promotionObject
+        },
+        GET_PROMOTION_LOADING(state) {
+            return state.promotionLoading
         }
     },
 
@@ -36,7 +42,6 @@ const promotion = {
             }
          
             const promotionsList = getters.GET_PROMOTIONS_LIST
-            console.log(promotionsList)
          
             const promotionFromStore = promotionsList.find((promotion) => promotion.id === promotionId)
          
@@ -67,5 +72,6 @@ const promotion = {
             }
         }     
     }
- 
 }
+
+export default promotion;

@@ -1,13 +1,18 @@
 <script>
 import Promotion from "@/components/Promotion.vue"
+import AppLoader from "@/components/AppLoader.vue";
 
 export default {
   components:{
-    Promotion
+    Promotion,
+    AppLoader
   },
   computed:{
     getData(){
       return this.$store.getters.GET_PROMOTIONS_LIST
+    },
+    promotionsLoading(){
+      return this.$store.getters.GET_PROMOTIONS_LOADING
     }
   }
 }
@@ -19,6 +24,7 @@ export default {
       <Promotion :promotion="prdct" :key="prdct.id"/>
     </div>
   </div>
+  <AppLoader v-show="promotionsLoading"/>
 </template>
 
 <style scoped>
