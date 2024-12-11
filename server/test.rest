@@ -1,0 +1,9 @@
+### POST - nowe dane
+
+GET http://localhost:3000/promotions HTTP/1.1
+content-type: application/json
+
+{    
+  "a": 1,
+  "b": 2
+}
