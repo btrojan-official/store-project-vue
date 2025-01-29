@@ -1,12 +1,12 @@
-// import express from 'express'
-// import cors from 'cors'
+import express from 'express'
+import cors from 'cors'
 
-// import imported_data from './data.js'
+import imported_data from './data.json'  with {type: "json"} 
 
-const express = require('express');
-const cors = require('cors');
+// const express = require('express');
+// const cors = require('cors');
 
-const imported_data = require("./data.json")
+// const imported_data = require("./data.json")
 
 const app = express();
 
