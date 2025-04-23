@@ -28,11 +28,16 @@ export default {
         onSubmit(e) {
             e.preventDefault();
 
+            const user = this.$store.getters.GET_CURRENT_USER;
+
             if (this.password.length < 3) {
                 this.error = "Password needs to be at least 3 characters long!";
             } 
             else if (this.password !== this.repeat_password) {
                 this.error = "Passwords do not match!";
+            }
+            else if(user !== null){
+                this.error = "You are already logged in. Log out first.";
             }
             else {
                 this.error = "";

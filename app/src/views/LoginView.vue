@@ -9,6 +9,7 @@ export default {
         email: "",
         password: "",
         error: "",
+        lastTry: false,
         };
     },
 
@@ -25,6 +26,16 @@ export default {
     methods: {
         onSubmit(e) {
             e.preventDefault();
+
+            if(this.password.length < 3){
+                this.error = "Password needs to be at least 3 characters long!";
+                return
+            }
+            const user = this.$store.getters.GET_CURRENT_USER;
+            if(user !== null){
+                this.error = "You are already logged in. Log out first.";
+                return;
+            }
             
             /* po przejściu walidacji (minimalna ilość znaków)
             uruchamiamy funkcję ze store User
@@ -39,10 +50,10 @@ export default {
 
                     const user = this.$store.getters.GET_CURRENT_USER;
 
-                    if (user.email){
+                    if (user.email) {
                         this.logged = true;
                         this.error = "";
-                    } 
+                    }
                     else this.logged = false;
 
                 })
@@ -64,7 +75,7 @@ export default {
 
         <h2>Login</h2>
         <div class="error" v-show="error">{{ error }} </div>
-        <input v-model="email" placeholder="example@email.com" />
+        <input v-model="email" type="email" placeholder="example@email.com" />
         <input type="password" v-model="password" placeholder="password"/>
 
         <button type="submit" :disabled="disabled">login</button>
