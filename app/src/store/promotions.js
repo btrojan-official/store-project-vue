@@ -50,7 +50,7 @@ const promotions = {
                 .then(data => {
                     commit("SET_PROMOTIONS_LIST", data.promotions)
                 })
-                .catch(error => {
+                .catch(_ => {
                     commit("SET_PROMOTIONS_ERROR", "server error!!!")
                 })
                 .finally(() => {
