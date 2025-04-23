@@ -4,6 +4,7 @@ import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import PromotionView from '@/views/PromotionView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import LoginView from '@/views/LoginView.vue'
 
 const NotFoundView = () => import("@/views/NotFoundView.vue")
 
@@ -34,6 +35,11 @@ const router = createRouter({
         path: '/register',
         name: 'RegisterView',
         component: RegisterView,
+      },
+      {
+        path: '/login',
+        name: 'LoginView',
+        component: LoginView,
       }
     ]
   })
