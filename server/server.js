@@ -1,7 +1,9 @@
 import express, { json } from "express";
 import cors from "cors";
-import { getUsers, addUser, doesUserExist } from "./app/dbcontroller.js"
+import bcrypt from "bcryptjs";
+import { getUsers, getUser, addUser, doesUserExist, loginUser } from "./app/dbcontroller.js"
 import imported_data from "./data.json" with {type: "json"} 
+import cookieParser from "cookie-parser";
 // import { createTask, getTasks, getById, deleteById, updateTask } from "./app/dbcontroller.js"
 
 const app = express()
@@ -15,33 +17,16 @@ const corsOptions = {
 
 app.use(json())
 app.use(cors(corsOptions));
+app.use(cookieParser())
 
 app.get("/api/users", async (req, res) => {
     const users = await getUsers();
     res.status(200).json(users);
 })
 
-// app.get("/api/task/:id", async (req, res) => {
-//     console.log("get task by id");
-//     const tasks = await getById(req.params.id);
-//     res.status(200).json(tasks);
-// })
-
-// app.delete("/api/task/:id", async (req, res) => {
-//     console.log("delete task by id");
-//     const tasks = await deleteById(req.params.id);
-//     res.status(200).json(tasks);
-// })
-
-// app.patch("/api/task", async (req, res) => {
-//     console.log("update task");
-//     const tasks = await updateTask(req.body.data);
-//     res.status(200).json(tasks);
-// })
-
 app.get('/promotions', (req, res) => {
     const data = imported_data;
-    res.json(data);
+    res.json(data.promotions);
 });
 
 app.get('/promotion/:id', (req, res)=>{
@@ -56,33 +41,53 @@ app.post("/createUser", async (req, res) => {
 
     const { email, password } = req.body;
     const userExists = await doesUserExist(email);
-    if (userExists){ console.log("user exists"); res.json({ status: "exist" }); }
+    if (userExists){ res.json({ status: "exist" }); }
     else{
         addUser(email, password);
         res.json({ status: "success" })
     }
 })
 
-app.post("/loginUser", (req, res) => {
-    // sprawdzenie czy dane usera są w bazie danych mongodb
-    // jeśli tak to ustawiamy cookie
-    // ustandaryzowane odpowiedzi, np
-    res.json({ status: "notlogged" })
+app.post("/loginUser", async (req, res) => {
+    const { email, password } = req.body;
+    const user = await getUser(email);
+
+    if (user) {
+        if (bcrypt.compareSync(password, user.password)) {
+            const token = await loginUser(email);
+            res.json({ status: "authorized", email: email, token: token })
+        }else{
+            res.json({ status: "unauthorized"})
+        }
+    }else{
+        res.json({ status: "unauthorized" })
+    }
 })
 
 app.post("/logoutUser", (req, res) => {
-    // usunięcie cookie
-    // ustandaryzowana odpowiedz, np
-    res.json({ status: "logout" })
+    const { token } = getUser(req.body.email);
+    if(token == req.body.token){
+        logoutUser(req.body);
+        res.json({ status: "logout" })
+    }else{
+        res.json({ status: "invalid_token" })
+    }
 })
 
-app.get("/getCurrentUser", (req, res) => {
+app.get("/getCurrentUser", async (req, res) => {
     // pobranie emaila z ciastka
+    if(req.cookies === undefined) return res.json({ status: "unauthorized 1" });
+    else if(req.cookies.email === undefined) return res.json({ status: "unauthorized 2" });
+    else if(req.cookies.token === undefined) return res.json({ status: "unauthorized 3" });
+
     const email = req.cookies.email;
-    //sprawdzenie czy jest w bazie danych mongodb
-    // ustandaryzowane odpowiedzi, np
-    if (found)
-       res.json({ status: "authorized", email: email })
+    const token = req.cookies.token;
+
+    const user = await getUser(email);
+    if(user === null) return res.json({ status: "unauthorized 4" });
+    else if(user.token !== token && user.token !== null) return res.json({ status: "unauthorized 5" });
+    else if(user.token_ttl < Date.now()) return res.json({ status: "unauthorized 6" });
+    else res.json({ status: "authorized", email: email, token: token })
  })
 
 app.listen(PORT, () => {

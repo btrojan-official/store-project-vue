@@ -1,7 +1,7 @@
 <template>
     <footer>
         <div>
-            <span>Store App - &copy; Bartosz Trojan 2024</span>
+            <span>Store App - &copy; Bartosz Trojan 2025</span>
         </div>
     </footer>
 </template>

@@ -2,7 +2,7 @@ import axios from "axios"
 
 const get = (url) => new Promise((resolve, reject) => {
      setTimeout(() => {
-        axios.get(url)
+        axios.get(url, { withCredentials: true })
             .then(response => {
                 resolve(response.data)
             })
@@ -17,7 +17,6 @@ const post = (url, userObject) => new Promise((resolve, reject) => {
     setTimeout(() => {
         axios.post(url, userObject, { withCredentials: true })
             .then(response => {
-                console.log("data", response.data);
                 resolve(response.data)
             })
             .catch(error => {
@@ -34,7 +33,7 @@ const getProduct = (id) => get(`http://localhost:3000/product/${id}`)
 const registerUser = (userObject) => post(`http://localhost:3000/createUser`, userObject);
 
 const loginUser = (userObject) => post(`http://localhost:3000/loginUser`, userObject);
-const logoutUser = () => post(`http://localhost:3000/logoutUser`);
+const logoutUser = (data) => post(`http://localhost:3000/logoutUser`, data);
 const getCurrentUser = () => get(`http://localhost:3000/getCurrentUser`);
 
 export {

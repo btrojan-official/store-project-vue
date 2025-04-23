@@ -51,7 +51,7 @@
 
 <template>
     <AppLoader v-show="promotionLoading"/>
-    <div>
+    <div v-show="!promotionLoading" class="all">
         <div :style="contStyle" class="top">
             <h1>{{ promotionData.header }}</h1>
             <h2>{{ promotionData.description }}</h2>
@@ -71,6 +71,13 @@
 </template>
 
 <style lang="css" scoped>
+    .all{
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+    }
     .top{
         padding: 20px;
         color: white;

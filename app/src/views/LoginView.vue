@@ -6,6 +6,9 @@ export default {
     data() {
         return {
         logged: false,
+        email: "",
+        password: "",
+        error: "",
         };
     },
 
@@ -34,31 +37,31 @@ export default {
             this.$store.dispatch("LOGIN_USER", {email: this.email, password: this.password })
                 .then(() => {
 
-                    const { email } = this.$store.getters.GET_CURRENT_USER;
+                    const user = this.$store.getters.GET_CURRENT_USER;
 
-                    if (email) this.logged = true;
+                    if (user.email){
+                        this.logged = true;
+                        this.error = "";
+                    } 
                     else this.logged = false;
 
-                    //this.$router.push("/");
                 })
                 .catch(() => {
                     this.error = "niepoprawne dane logowania";
                     this.logged = false;
-                });
+                })
         }
     }
 }
 </script>
 
 <template>
-    <AppLoader v-show="loading"/>
-
-    <div v-show="status=='logged_in'" class="box">
-        <h1>Success</h1>
-        <p>You are logged in</p>
-    </div>
+    <AppLoader v-show="this.$store.getters.GET_USER_LOADING"/>
 
     <form @submit="onSubmit" class="box">
+        <h1 v-show="logged">Success</h1>
+        <p v-show="logged">You are logged in</p>
+
         <h2>Login</h2>
         <div class="error" v-show="error">{{ error }} </div>
         <input v-model="email" placeholder="example@email.com" />

@@ -4,6 +4,9 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
 export default{
+    beforeCreate() {
+        this.$store.dispatch("FETCH_CURRENT_USER");
+    },
     components:{
         Header, Footer
     },
@@ -28,6 +31,7 @@ export default{
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         width: 100%;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div :style="contStyle">
-      <h3><RouterLink :to="routerLink" exact>{{ this.promotion.header }}</RouterLink></h3>
-      <h2>{{ this.promotion.description }}</h2>
+      <RouterLink :to="routerLink" exact><h2>{{ this.promotion.header }}</h2></RouterLink>
+      <h3>{{ this.promotion.description }}</h3>
     </div>
   </template>
   
@@ -38,5 +38,19 @@
       background-repeat: no-repeat;
       width: 100%;
       padding: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      color: white;
     }
+
+    h2{
+      font-size: 2em;
+      color: white;
+      text-align: center;
+      text-decoration: underline;
+    }
+
   </style>

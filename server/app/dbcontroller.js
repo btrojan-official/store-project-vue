@@ -22,6 +22,11 @@ const getUsers = async () => {
     return items
 }
 
+const getUser = async (email) => {
+    const user = await collection.findOne({ email: email });
+    return user;
+};
+
 const addUser = async (email, password) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,16 +34,29 @@ const addUser = async (email, password) => {
             _id: new ObjectId(),  // unique MongoDB ID
             email: email,
             password: hashedPassword,
-            createdAt: new Date()
+            createdAt: new Date(),
+            token: null,
+            token_ttl: null
         };
 
         const result = await collection.insertOne(newUser);
-        console.log("User added:", result.insertedId);
         return result;
     } catch (err) {
         console.log("Error adding user:", err);
     }
 };
+
+const loginUser = async (email) => {
+    const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const token_ttl = Date.now() + 1000 * 60 * 60 * 24;
+    await collection.updateOne({ email: email }, { $set: { token: token, token_ttl: token_ttl } });
+
+    return token
+}
+
+const logoutUser = async (email) => {
+    await collection.updateOne({ email: email }, { $set: { token: null, token_ttl: null } });
+}
 
 const doesUserExist = async (email) => {
     const user = await collection.findOne({ email: email });
@@ -49,4 +67,4 @@ const doesUserExist = async (email) => {
 connect()
 
 
-export { getUsers, addUser, doesUserExist }
+export { getUsers, getUser, addUser, doesUserExist, loginUser }
