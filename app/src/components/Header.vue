@@ -5,7 +5,7 @@
             <RouterLink to="/about">About</RouterLink>
             <RouterLink to="/login">Login</RouterLink>
             <RouterLink to="/register">Register</RouterLink>
-            <RouterLink to="/asdklfksdf">Not found</RouterLink>
+            <RouterLink to="/random-subpage">Not found</RouterLink>
         </div>
     </header>
 </template>
