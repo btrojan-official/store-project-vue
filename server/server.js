@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import cors from "cors";
-import { getTasks } from "./app/dbcontroller.js"
+import { getUsers, addUser, doesUserExist } from "./app/dbcontroller.js"
 import imported_data from "./data.json" with {type: "json"} 
 // import { createTask, getTasks, getById, deleteById, updateTask } from "./app/dbcontroller.js"
 
@@ -16,10 +16,9 @@ const corsOptions = {
 app.use(json())
 app.use(cors(corsOptions));
 
-app.get("/api/task", async (req, res) => {
-    console.log("get tasks");
-    const tasks = await getTasks();
-    res.status(200).json(tasks);
+app.get("/api/users", async (req, res) => {
+    const users = await getUsers();
+    res.status(200).json(users);
 })
 
 // app.get("/api/task/:id", async (req, res) => {
@@ -53,12 +52,38 @@ app.get("/product/:id", (req, res) => {
     res.json(imported_data.products.find(item => item.id == req.params.id));
 })
 
-app.post("/createUser", (req, res) => {
+app.post("/createUser", async (req, res) => {
 
-    // dodanie obiektu usera do bazy MongoDB jeśli go nie ma
-    // ustandaryzowane odpowiedzi do klienta, jak poniżej:
-    res.json({ status: "registered" })
+    const { email, password } = req.body;
+    const userExists = await doesUserExist(email);
+    if (userExists){ console.log("user exists"); res.json({ status: "exist" }); }
+    else{
+        addUser(email, password);
+        res.json({ status: "success" })
+    }
 })
+
+app.post("/loginUser", (req, res) => {
+    // sprawdzenie czy dane usera są w bazie danych mongodb
+    // jeśli tak to ustawiamy cookie
+    // ustandaryzowane odpowiedzi, np
+    res.json({ status: "notlogged" })
+})
+
+app.post("/logoutUser", (req, res) => {
+    // usunięcie cookie
+    // ustandaryzowana odpowiedz, np
+    res.json({ status: "logout" })
+})
+
+app.get("/getCurrentUser", (req, res) => {
+    // pobranie emaila z ciastka
+    const email = req.cookies.email;
+    //sprawdzenie czy jest w bazie danych mongodb
+    // ustandaryzowane odpowiedzi, np
+    if (found)
+       res.json({ status: "authorized", email: email })
+ })
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

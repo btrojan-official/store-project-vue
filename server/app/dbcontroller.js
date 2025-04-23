@@ -1,36 +1,52 @@
 import { connectToMongoDB, ObjectId } from "./dbconnect.js";
-
-// zmienne
+import bcrypt from "bcryptjs";
 
 let db;
 let collection;
 
-//funkcje
-
 const createCollection = async () => {
-    let collection = await db.collection('task_collection');
+    let collection = await db.collection('users_collection');
     console.log("+---------------- collection works!")
     return collection
 }
 
+const connect = async () => {
+    db = await connectToMongoDB()
+    console.log("+---------------- db works!");
+    collection = await createCollection()
+}
 
-//gettasks
 
-const getTasks = async () => {
+const getUsers = async () => {
     const items = await collection.find({}).toArray()
-    console.log(items)
     return items
 }
 
-//start connection
+const addUser = async (email, password) => {
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = {
+            _id: new ObjectId(),  // unique MongoDB ID
+            email: email,
+            password: hashedPassword,
+            createdAt: new Date()
+        };
 
-const connect = async () => {
-    db = await connectToMongoDB() // obiekt bazy danych mongo
-    console.log("+---------------- db works!");
-    collection = await createCollection() // obiekt kolekcji
-}
+        const result = await collection.insertOne(newUser);
+        console.log("User added:", result.insertedId);
+        return result;
+    } catch (err) {
+        console.log("Error adding user:", err);
+    }
+};
+
+const doesUserExist = async (email) => {
+    const user = await collection.findOne({ email: email });
+    return (user !== null);
+};
+
 
 connect()
 
 
-export { getTasks }
+export { getUsers, addUser, doesUserExist }
