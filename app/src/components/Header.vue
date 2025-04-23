@@ -3,6 +3,7 @@
         <div class="menu">
             <RouterLink to="/" exact>Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
+            <RouterLink to="/register">Register</RouterLink>
             <RouterLink to="/asdklfksdf">Not found</RouterLink>
         </div>
     </header>
