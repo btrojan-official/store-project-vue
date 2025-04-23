@@ -7,8 +7,14 @@ import imported_data from "./data.json" with {type: "json"}
 const app = express()
 const PORT = 3000;
 
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,            //ustawia header access-control-allow-credentials:true
+    optionSuccessStatus: 200
+}
+
 app.use(json())
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get("/api/task", async (req, res) => {
     console.log("get tasks");
