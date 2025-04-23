@@ -1,16 +1,11 @@
 <script>
-import { registerUser } from "@/api";
+import { loginUser, registerUser } from "@/api";
 import AppLoader from "@/components/AppLoader.vue";
 
 export default {
     data() {
         return {
-        error: "",
-        email: "",
-        password:"",
-        repeat_password:"",
-        status: "register",
-        loading: false
+        logged: false,
         };
     },
 
@@ -27,42 +22,29 @@ export default {
     methods: {
         onSubmit(e) {
             e.preventDefault();
+            
+            /* po przejściu walidacji (minimalna ilość znaków)
+            uruchamiamy funkcję ze store User
+            jeśli otrzymamy z serwera email zalogowanego usera
+            to znaczy że można wykonywać działania na kliencie
+            np przekierować się na inny adres
+            logika pozostałych komunikatów musi być oparta o serwer
+            */
 
-            if (this.password.length < 3) {
-                this.error = "Password needs to be at least 3 characters long!";
-            } 
-            else if (this.password !== this.repeat_password) {
-                this.error = "Passwords do not match!";
-            }
-            else {
-                this.error = "";
+            this.$store.dispatch("LOGIN_USER", {email: this.email, password: this.password })
+                .then(() => {
 
-                // do funkcji przekazujemy obiekt z danymi usera
-                this.loading = true;
-                registerUser({ email: this.email, password: this.password })
-                .then((data) => {
-                    this.status = data.status;
-                    /* 
-                    tu kluczowa sprawa, do zsynchronizowania z odpowiedzią serwera:
-                    na jej podstawie decydujemy czy formularz ma pozostać czy zniknąć
-                    bo user istnieje już lub nie            
-                    this.exists = true;            
-                    this.registered = true;
-                    */
+                    const { email } = this.$store.getters.GET_CURRENT_USER;
 
-                
+                    if (email) this.logged = true;
+                    else this.logged = false;
+
+                    //this.$router.push("/");
                 })
-                .catch((err) => {
-                    // w wypadku błędu zakładamy, że user się nie zarejestrował
-                    this.registered = false;
-                    this.status = "register";
-                    this.error = "Cannot register user! Try again later";
-                })
-                .finally(() => {
-                    // w obu wypadkach zatrzymujemy loader
-                    this.loading = false;
+                .catch(() => {
+                    this.error = "niepoprawne dane logowania";
+                    this.logged = false;
                 });
-            }
         }
     }
 }
@@ -71,24 +53,18 @@ export default {
 <template>
     <AppLoader v-show="loading"/>
 
-    <div v-show="status=='exist'" class="box">
-        <h1>Info</h1>
-        <p>User already exists</p>
-    </div>
-
-    <div v-show="status=='success'" class="box">
+    <div v-show="status=='logged_in'" class="box">
         <h1>Success</h1>
-        <p>Thank you for registering</p>
+        <p>You are logged in</p>
     </div>
 
-    <form @submit="onSubmit" v-show="status=='register'" class="box">
-        <h2>Register</h2>
+    <form @submit="onSubmit" class="box">
+        <h2>Login</h2>
         <div class="error" v-show="error">{{ error }} </div>
         <input v-model="email" placeholder="example@email.com" />
         <input type="password" v-model="password" placeholder="password"/>
-        <input type="password" v-model="repeat_password" placeholder="repeat password"/>
 
-        <button type="submit" :disabled="disabled">register</button>
+        <button type="submit" :disabled="disabled">login</button>
     </form>
 </template>
 
@@ -107,6 +83,7 @@ export default {
         width: fit-content;
         background-color: rgb(255, 178, 178);
         border: 2px solid rgb(255, 92, 92);
+        color: rgb(255, 92, 92);
         border-radius: 10px;
         padding: 10px;
         width: 100%;
