@@ -18,6 +18,7 @@
             promotionLoading(){
                 return this.$store.getters.GET_PROMOTION_LOADING
             },
+
             contStyle() {
                 const { image } = this.promotionData;
                 let imageUrl;
