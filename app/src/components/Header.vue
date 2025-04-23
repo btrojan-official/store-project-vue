@@ -3,18 +3,12 @@
         <div class="menu">
             <RouterLink to="/" exact>Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
+            <RouterLink to="/login">Login</RouterLink>
             <RouterLink to="/register">Register</RouterLink>
             <RouterLink to="/asdklfksdf">Not found</RouterLink>
         </div>
     </header>
-
 </template>
-
-<script>
-    export default {
-        
-    }
-</script>
 
 <style lang="css" scoped>
     header{
